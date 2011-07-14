@@ -5,6 +5,7 @@
 
 import pygame, os
 from pygame.locals import KEYDOWN, KEYUP, MOUSEBUTTONDOWN, MOUSEMOTION, QUIT
+import gameLogic
 
 def proceed(gameState):
     gs = gameState
@@ -12,8 +13,10 @@ def proceed(gameState):
     gs.screen.blit(gs.background, (0, 0)) # Rita bakgrunden
         
     gs.thor.update(gs)
-    #gs.leveleditor.update()
+    gs.leveleditor.update()
     gs.map.update(gs)
+    
+    gameLogic.loadvisible(gs)
     
     if pygame.event.peek(): # Titta om det finns en event i event-kon
         if not handleInput(pygame.event.get(), gs):  # Om det finns skicka event till input()
@@ -58,6 +61,9 @@ def handleInput(events, gameState):
                 map.newMapFromScratch(gs)
             elif event.key == 32 or event.key == 102:        # Tryck space for SKJUT!
                 thor.shooting = True
+            elif event.key ==  99:   # tryck C for super-cirkeln
+                thor.superShot(gs)
+                print "super shot!"
             else:
                 print event
         elif event.type == KEYUP:

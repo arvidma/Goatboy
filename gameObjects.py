@@ -3,7 +3,7 @@
 @author: arvid
 '''
 
-import pygame, random, gameLogic, mapLogic
+import pygame, random, gameLogic, mapLogic, math
 
 class GameObject(pygame.sprite.Sprite):
     x, y = 0, 0
@@ -154,6 +154,11 @@ class Goatboy(GameObject):
 
     def get_y(self):
         return self.y
+    
+    def superShot(self, gameState):
+        for i in range(1,36):
+            shot = FancyShot(gameState=gameState, angle=( 2*math.pi ) * i/36 )
+            gameState.map.addShot(shot)
 
 
 class Flamenemy(GameObject):
@@ -291,7 +296,6 @@ class Shot(GameObject):
 
     def __init__(self, gameState):
         gs = gameState
-        
         pygame.sprite.Sprite.__init__(self)
         for filename in self.filenames:
             image, self.rect = gameLogic.load_image(filename, -1)
@@ -307,6 +311,7 @@ class Shot(GameObject):
 
     def update(self, gameState):
         gs = gameState
+
         self.x = self.x + self.dx
         self.y = self.y + self.dy
         self.dy = self.dy + self.ddy
@@ -324,7 +329,53 @@ class Shot(GameObject):
             gs.map.enemies[self.rect.collidelist(gs.map.enemies)].die(gs)
             gameLogic.loadvisible(gs)
 
+class FancyShot(GameObject):
+    gameState = None
+    angle = None
+    velocity = None
+    filenames = ['shot.bmp', 'oldshot.bmp']
+    images = []
+    imagenumber = 0
+    timeToLive = 30     # Antal frames som skottet ar vid liv. Range ar ttl*velocity
+    x = 0
+    y = 0
+    dx = 0
+    dy = 0
+    
+    def __init__(self, gameState, angle=0.25, velocity=15):
+        pygame.sprite.Sprite.__init__(self)
+        self.gameState = gameState
+        self.angle = angle
+        self.velocity = velocity        
 
+        for filename in self.filenames:
+            image, self.rect = gameLogic.load_image(filename, -1)
+            self.images.append(image)
+        self.image = self.images[0]
+        
+        self.x = self.gameState.thor.x - self.gameState.scrollx
+        self.y = self.gameState.thor.y + 30 - self.gameState.scrolly
+        
+        self.dx = int( math.cos(self.angle) * self.velocity )
+        self.dy = int( math.sin(self.angle) * self.velocity )
+        
+    def update(self, knarg=None):
+        if self.timeToLive == 0:
+            self.gameState.map.shots.remove(self)
+            return
+        
+        if self.rect.collidelist(self.gameState.map.enemies) != -1:
+            self.gameState.map.shots.remove(self)
+            self.gameState.map.enemies[self.rect.collidelist(self.gameState.map.enemies)].die(self.gameState)
+
+        self.image = self.images[ (self.imagenumber) % ( len(self.images) ) ]
+        self.imagenumber += 1
+        
+        self.x += self.dx
+        self.y += self.dy    
+        self.timeToLive -= 1
+
+        self.rect.topleft = (self.x + self.gameState.scrollx, self.y + self.gameState.scrolly)
 
 class Door(GameObject):
     '''
