@@ -1,5 +1,6 @@
 '''
-Based on inputbox.py by Timothy Downs, changed a bit by Arvid for use in Goatboy
+Get_key(), display_box() and ask() are based on inputbox.py by Timothy Downs, but changed 
+a bit by Arvid for use in Goatboy.
 
 @author: Timothy Downs
 @author: arvid
@@ -46,3 +47,7 @@ def ask(screen, question, prefill=""):
             current_string.append(chr(inkey))
         display_box(screen, question + ": " + string.join(current_string,""))
     return string.join(current_string,"")
+
+def scaleToScreenSize(surface, screen):
+    return pygame.transform.smoothscale( surface, ( screen.get_width(), screen.get_height() ) )
+    

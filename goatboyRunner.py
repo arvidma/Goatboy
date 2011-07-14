@@ -5,7 +5,7 @@ Created on 12 jul 2011
 @author: Arvid
 '''
 
-import gameLogic, eventLoop, gameState, mapLogic, pygame, os, time
+import gameLogic, eventLoop, gameState, mapLogic, pygame, os, time, guiTools
 
 def initializeGame(gameState):
     gs = gameState
@@ -15,7 +15,7 @@ def initializeGame(gameState):
     gs.window = pygame.display.set_mode(pygame.display.list_modes()[0]) # Fonsterstorlek
     gs.screen = pygame.display.get_surface() # Skarmyta
     gs.back_file_name = os.path.join("data", "background.bmp") # bakgrundsfilnamnsokvag
-    gs.back_surface = pygame.image.load(gs.back_file_name)
+    gs.back_surface = guiTools.scaleToScreenSize(pygame.image.load(gs.back_file_name), gs.screen)
     gs.clock = pygame.time.Clock()
     gs.background = pygame.Surface(gs.screen.get_size())
     gs.scrollx = 0
@@ -47,6 +47,8 @@ def endGame(gameState):
     print "You played the game for %i seconds, during which %i frames were rendered. That gives an average FPS of %i \n" % (playingTime, gameState.frameCounter, gameState.frameCounter/playingTime)
     
     gameLogic.highscore(gameState.scoore)
+    
+    pygame.quit()
 
 
 def main():
