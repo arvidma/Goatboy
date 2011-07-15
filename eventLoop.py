@@ -15,7 +15,7 @@ def proceed(gameState):
     gs.thor.update(gs)
     gs.leveleditor.update()
     gs.map.update(gs)
-    
+    gs.panel.update()
     gameLogic.loadvisible(gs)
     
     if pygame.event.peek(): # Titta om det finns en event i event-kon

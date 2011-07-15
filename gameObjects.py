@@ -35,6 +35,8 @@ class Goatboy(GameObject):
     rightscroll = 600
     shooting = False
     weapon = 1
+    usedUpSuperShots = 1
+
     dx = 0    # Goatboys momentana hastighet i x-led
     dy = 0    # -"- y-led
     ddx = 0 # Goatboys acceleration i x-led
@@ -156,6 +158,11 @@ class Goatboy(GameObject):
         return self.y
     
     def superShot(self, gameState):
+        if (gameState.scoore / self.usedUpSuperShots) < 10:
+            return
+        
+        self.usedUpSuperShots += 1
+        
         for i in range(1,36):
             shot = FancyShot(gameState=gameState, angle=( 2*math.pi ) * i/36 )
             gameState.map.addShot(shot)

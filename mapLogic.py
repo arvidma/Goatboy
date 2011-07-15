@@ -46,14 +46,7 @@ class Map():
             door.update(gs)
         for shot in self.shots:
             shot.update(gs)
-        if pygame.font:
-            font = pygame.font.Font(None, 36)
-            text = font.render(str(gs.scoore), 1, (255, 5, 5))
-            textpos = text.get_rect()
-            textpos.centerx = gs.background.get_rect().centerx
-            gs.background.blit(gs.scooresurface, textpos)
-            gs.background.blit(text, textpos)
-
+        
     def reset(self):
         for index, block in enumerate(self.blocks):
             block.setposition(self.initblocks[index][0], self.initblocks[index][1])

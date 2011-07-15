@@ -3,6 +3,8 @@ Created on 12 jul 2011
 
 @author: arvid
 '''
+import statusPanel, pygame, gameObjects, levelEditor, gameLogic, mapLogic, guiTools, os
+ 
 
 class GameState(object):
     '''
@@ -26,5 +28,30 @@ class GameState(object):
     scooresurface = None
     startingTime = 0
     thor = None
-    window = None    
+    window = None
+    panel = None 
+    
+    def __init__(self):
+        pygame.init()
+        pygame.display.set_caption('Goatboy: the hoorned avanger') #Fonstertitel
 
+        self.window = pygame.display.set_mode(pygame.display.list_modes()[0]) # Fonsterstorlek
+        self.screen = pygame.display.get_surface() # Skarmyta
+
+        self.back_file_name = os.path.join("data", "background.bmp") # bakgrundsfilnamnsokvag
+        self.back_surface = guiTools.scaleToScreenSize(pygame.image.load(self.back_file_name), self.screen)
+        self.background = pygame.Surface(self.screen.get_size())
+        self.scooresurface = pygame.Surface((50, 25))
+        self.background.blit(self.back_surface, (0, 0))
+        
+        self.clock = pygame.time.Clock()
+
+        self.map = mapLogic.Map()     # skapa ett map-objekt
+        self.map.loadmap("map1.map") # ladda banan fran fil
+    
+        self.thor = gameObjects.Goatboy(self) # skapa ett goatboy-objekt =)
+        self.leveleditor = levelEditor.LevelEditor()
+        self.panel = statusPanel.statusPanel(self)
+        
+        gameLogic.loadvisible(self)
+        pygame.display.flip()
