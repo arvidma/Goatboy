@@ -341,20 +341,21 @@ class FancyShot(GameObject):
     gameState = None
     angle = None
     velocity = None
+    timeToLive = None   # Antal frames som skottet ar vid liv. Range ar ttl*velocity
     filenames = ['shot.bmp', 'oldshot.bmp']
     images = []
-    imagenumber = 0
-    timeToLive = 30     # Antal frames som skottet ar vid liv. Range ar ttl*velocity
+    imagenumber = 0    
     x = 0
     y = 0
     dx = 0
     dy = 0
     
-    def __init__(self, gameState, angle=0.25, velocity=15):
+    def __init__(self, gameState, angle=0.25, velocity=15, timeToLive=30):
         pygame.sprite.Sprite.__init__(self)
         self.gameState = gameState
         self.angle = angle
         self.velocity = velocity        
+        self.timeToLive = timeToLive
 
         for filename in self.filenames:
             image, self.rect = gameLogic.load_image(filename, -1)
