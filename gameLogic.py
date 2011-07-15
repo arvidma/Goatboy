@@ -17,8 +17,9 @@ def reset(gameState):
     '''
     Reset everything but the current level and current weapon
 	'''
-    gs.scrollx, gs.scrolly, gs.thor.dx, gs.thor.ddx, gs.thor.dy, = 0, 0, 0, 0, 0
-    gameState.scoore = gameState.scoreFromPreviousLevel
+    gs.scrollx, gs.scrolly, gs.thor.dx, gs.thor.ddx, gs.thor.dy = 0, 0, 0, 0, 0
+    gs.thor.usedUpSuperShots = gs.thor.prevMapUsedUpSuperShots
+    gs.scoore = gs.scoreFromPreviousLevel
     gs.map.reset()
     gs.thor.setposition(300, 150)
     gs.background.blit(gs.back_surface, (0, 0))

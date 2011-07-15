@@ -35,7 +35,8 @@ class Goatboy(GameObject):
     rightscroll = 600
     shooting = False
     weapon = 1
-    usedUpSuperShots = 1
+    usedUpSuperShots = 1        # Must start at 1 to avoid DIV/0
+    prevMapUsedUpSuperShots = 1 #
 
     dx = 0    # Goatboys momentana hastighet i x-led
     dy = 0    # -"- y-led
@@ -404,6 +405,7 @@ class Door(GameObject):
 
     def open(self, gameState):
         gameState.scoreFromPreviousLevel = gameState.scoore
+        gameState.thor.prevMapUsedUpSuperShots = gameState.thor.usedUpSuperShots        
         gameState.map = mapLogic.Map()
         gameState.map.loadmap(self.targetMap)
         gameState.mapname = self.targetMap

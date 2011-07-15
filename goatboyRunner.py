@@ -8,6 +8,13 @@ Created on 12 jul 2011
 import gameLogic, eventLoop, gameState, pygame, time
 
 def initializeGame():
+    
+    try:
+        import psyco
+        psyco.full()
+    except:
+        print "Couldn't load Psyco. Game might execute somewhat slower, but should still be OK."
+        
     gs = gameState.GameState()
     gs.frameCounter = 0                    # Set up FPS counter
     gs.startingTime = time.time()          #
